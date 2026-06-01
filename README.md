@@ -38,7 +38,8 @@ To ensure maximum impact for Vocallabs.ai, these 5 feedback points are mapped us
 
 **a) Observed:** Testing the developer sandbox via the interactive API documentation ("Try It Out") reveals multiple critical backend orchestration errors across core agent management endpoints. Sending a `GET` request to `/getAgentTemplates` throws a hard browser-level `NetworkError when attempting to fetch resource`. Furthermore, a `POST` request to `/createAIAgent` returns a raw database-level constraint violation directly in the client response payload (`"Foreign key violation. insert or update on table \"agent\" violates foreign key constraint \"agent_client_id_fkey\"`), yet masks this downstream failure behind an **HTTP 200 OK** status code.
 
-> *[Insert API Error Screenshots Here - e.g., image_a5a55c.png and image_a54f23.png]*
+<img width="883" height="647" alt="image" src="https://github.com/user-attachments/assets/600d267a-f271-4487-8116-808dd7c9f6f9" />
+
 
 **b) Problem:** Exposing explicit foreign key names and table structures is a significant security and architectural vulnerability, indicating that database logs are directly exposed to the client face without a sanitization layer. Additionally, masking a backend database failure behind an HTTP 200 OK code breaks standard REST/GraphQL conventions. Automated monitoring systems and client-side error loggers rely on proper HTTP status classes (4xx/5xx) to handle exceptions; returning a 200 means client code will assume the agent was successfully spun up when it was actually dropped.
 
